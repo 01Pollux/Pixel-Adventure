@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Fruits
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - Player
+  - Ground
+  - Enemy
+  - Traps
+  - Particles
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Borders
+    uniqueID: 3608263457
+    locked: 0
+  - name: Ground
+    uniqueID: 1297368881
+    locked: 0
+  - name: Particles Behind Actors
+    uniqueID: 3679737587
+    locked: 0
+  - name: Actors
+    uniqueID: 3507747131
+    locked: 0
+  - name: Particles
+    uniqueID: 3519391289
+    locked: 0
+  - name: GUI
+    uniqueID: 2664367631
+    locked: 0
