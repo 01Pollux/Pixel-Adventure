@@ -26,13 +26,18 @@ namespace Interfaces
 
             health.CurrentDamageCooldown = Time.time + health.DamageCooldown;
 
-            health.Health -= damage_info.Damage;
-            if (health.Health < 0)
-                health.OnTakeDamageFatal(damage_info);
-            else
-                health.OnTakeDamage(damage_info);
+            bool was_dead = health.Health <= 0;
+            if (!was_dead)
+            {
+                health.Health -= damage_info.Damage;
+                if (health.Health <= 0)
+                    health.OnTakeDamageFatal(damage_info);
+                else
+                    health.OnTakeDamage(damage_info);
 
-            return true;
+                return true;
+            }
+            return false;
         }
     }
 }

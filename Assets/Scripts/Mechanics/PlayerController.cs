@@ -23,8 +23,6 @@ namespace Mechanics
 
         [SerializeField] private int m_NumberOfJumps = 2;
         [SerializeField] private int m_NumberOfDahes = 2;
-
-        [SerializeField] private Vector2[] m_Points = new Vector2[4];
         [SerializeField] private float m_Radius = 0.04f;
 
         [Header("Effects")]
@@ -65,19 +63,27 @@ namespace Mechanics
 
             GameplayInput.WallClimb.started += OnPlayerBeginWallGrab;
             GameplayInput.WallClimb.canceled += OnPlayerEndWallGrab;
+        }
 
-            GameplayInput.Movement.performed += OnPlayerMove;
+        private void OnEnable()
+        {
+            m_CurDashes = m_CurJumps = 0;
+            m_MoveState = 0;
         }
 
 
         private void OnPlayerBeginJump(InputAction.CallbackContext ctx)
         {
+            if (!enabled)
+                return;
             m_MoveState |= MoveState.Jumping;
             PlayerTryJump();
         }
 
         private void OnPlayerEndJump(InputAction.CallbackContext ctx)
         {
+            if (!enabled)
+                return;
             m_MoveState &= ~MoveState.Jumping;
             if (!m_MoveState.HasFlag(MoveState.Dashing))
             {
@@ -89,6 +95,8 @@ namespace Mechanics
 
         private void OnPlayerTryToDash(InputAction.CallbackContext ctx)
         {
+            if (!enabled)
+                return;
             if (m_MoveState.HasFlag(MoveState.Dashing) ||
                 m_CurDashes >= m_NumberOfDahes ||
                 GameplayInput.Movement.ReadValue<Vector2>() == Vector2.zero)
@@ -100,6 +108,8 @@ namespace Mechanics
 
         private void OnPlayerBeginWallGrab(InputAction.CallbackContext ctx)
         {
+            if (!enabled)
+                return;
             if (IsTouchingWall)
             {
                 m_Rigidbody.gravityScale = 0f;
@@ -115,17 +125,13 @@ namespace Mechanics
 
         private void OnPlayerEndWallGrab(InputAction.CallbackContext ctx)
         {
+            if (!enabled)
+                return;
             if (m_MoveState.HasFlag(MoveState.WallClimbing))
             {
                 m_Rigidbody.gravityScale = 3.5f;
                 m_MoveState &= ~MoveState.WallClimbing;
             }
-        }
-
-
-        private void OnPlayerMove(InputAction.CallbackContext ctx)
-        {
-
         }
 
 
@@ -207,13 +213,16 @@ namespace Mechanics
 
             m_MoveState |= MoveState.Dashing;
             m_MoveState |= MoveState.WallJumping;
+            m_MoveState &= ~MoveState.WallClimbing;
 
             m_Rigidbody.gravityScale = 0f;
 
             m_DashEffect.transform.position = m_Rigidbody.position;
             m_DashEffect.Play();
 
+
             yield return new WaitForSeconds(.15f);
+
 
             if (m_MoveState.HasFlag(MoveState.WallClimbing))
                 m_Rigidbody.gravityScale = 0f;

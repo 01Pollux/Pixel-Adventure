@@ -4,6 +4,6 @@ namespace Interfaces
 {
     public interface IFruit
     {
-        void OnTouch(LocalPlayerController player_controller);
+        void OnTouch(PlayerController player_controller);
     }
 }

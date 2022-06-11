@@ -60,3 +60,6 @@ TagManager:
   - name: GUI
     uniqueID: 2664367631
     locked: 0
+  - name: Traps
+    uniqueID: 545722161
+    locked: 0

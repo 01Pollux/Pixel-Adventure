@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_StartupDisabled: 0
+  m_Priority: 0
   m_IdleDuration: 1.5
   m_PatrolState: {fileID: 4554178917145935877}
 --- !u!1 &4554178917145935879
@@ -92,6 +93,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_StartupDisabled: 1
+  m_Priority: 0
   m_PatrolPositions:
   - {x: -8.25, y: -2.61}
   - {x: -15, y: -2.61}
@@ -177,7 +179,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: -328338767, guid: 7018319fb0ec1a3429a14fb71e53001b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
@@ -268,9 +270,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8ba30ab41008ca42bd86a51ac28e651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Actions:
-  - {fileID: 0}
-  - {fileID: 0}
   m_Damage: 15
   m_DamageCooldown: 0.7
   m_KnockbackMod: 0
