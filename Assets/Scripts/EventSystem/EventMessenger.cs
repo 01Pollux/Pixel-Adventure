@@ -51,7 +51,7 @@ namespace EventSystem
         }
 
 
-        public static void Raise(EventType id, object sender, EventArgs args)
+        public static void Raise(EventType id, object sender, EventArgs args = null)
         {
             var messenger = Instance.Value;
             if (!messenger)
@@ -64,7 +64,7 @@ namespace EventSystem
             @event.Invoke(sender, args);
         }
 
-        public static void RaiseAsync(EventType id, object sender, EventArgs args)
+        public static void RaiseAsync(EventType id, object sender, EventArgs args = null)
         {
             Task.Run(() =>
             {

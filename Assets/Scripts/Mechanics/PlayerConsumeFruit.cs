@@ -1,4 +1,3 @@
-using Interfaces;
 using System.Collections;
 using UnityEngine;
 
@@ -13,6 +12,7 @@ namespace Mechanics
         private IEnumerator CoOnPlayerTouch()
         {
             m_Animator.SetTrigger("Pop");
+            EventSystem.GameMessenger.RaiseAsync(EventSystem.EGameEvent.FruitConsume, this);
 
             yield return new WaitForSeconds(0.5f);
             Destroy(gameObject);

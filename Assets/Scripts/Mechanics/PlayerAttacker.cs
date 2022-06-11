@@ -26,14 +26,14 @@ namespace Mechanics
 
         private Animator m_Animator;
         private PlayerController m_Controller;
-        private SpriteRenderer m_SpriteRenderer;
+        private Rigidbody2D m_Rigidbody;
 
 
         private void Awake()
         {
             m_Animator = GetComponent<Animator>();
             m_Controller = GetComponent<PlayerController>();
-            m_SpriteRenderer = GetComponent<SpriteRenderer>();
+            m_Rigidbody = GetComponent<Rigidbody2D>();
         }
 
         private void Start() => Respawn();
@@ -59,9 +59,13 @@ namespace Mechanics
         {
             m_Animator.SetTrigger("Die");
             m_Controller.enabled = false;
+            m_Rigidbody.simulated = false;
 
+            EventSystem.GameMessenger.RaiseAsync(EventSystem.EGameEvent.PlayerDeath, this);
             yield return new WaitForSeconds(m_RespawnTime);
+            EventSystem.GameMessenger.RaiseAsync(EventSystem.EGameEvent.PlayerRespawn, this);
 
+            m_Rigidbody.simulated = true;
             m_Animator.SetTrigger("Respawn");
             Respawn();
         }
@@ -69,8 +73,10 @@ namespace Mechanics
 
         private void Respawn()
         {
-            Health = m_MaxHealth;
             m_Controller.enabled = true;
+            m_Rigidbody.velocity = Vector2.zero;
+
+            Health = m_MaxHealth;
             gameObject.transform.position = m_SpawnPosition;
         }
 
