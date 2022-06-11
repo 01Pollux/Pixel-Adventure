@@ -26,12 +26,14 @@ namespace Mechanics
 
         private Animator m_Animator;
         private PlayerController m_Controller;
+        private SpriteRenderer m_SpriteRenderer;
 
 
         private void Awake()
         {
             m_Animator = GetComponent<Animator>();
             m_Controller = GetComponent<PlayerController>();
+            m_SpriteRenderer = GetComponent<SpriteRenderer>();
         }
 
         private void Start() => Respawn();
@@ -55,11 +57,12 @@ namespace Mechanics
 
         private IEnumerator CoOnPlayerDeath()
         {
-            //m_Animator.SetTrigger("Death");
+            m_Animator.SetTrigger("Die");
             m_Controller.enabled = false;
 
             yield return new WaitForSeconds(m_RespawnTime);
 
+            m_Animator.SetTrigger("Respawn");
             Respawn();
         }
 
