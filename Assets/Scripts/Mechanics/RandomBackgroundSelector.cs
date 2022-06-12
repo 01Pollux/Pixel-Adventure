@@ -1,6 +1,5 @@
 using UnityEngine;
 
-
 namespace Mechanics
 {
     public class RandomBackgroundSelector : MonoBehaviour
