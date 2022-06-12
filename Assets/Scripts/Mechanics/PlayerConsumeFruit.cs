@@ -6,6 +6,7 @@ namespace Mechanics
     public class PlayerConsumeFruit : MonoBehaviour
     {
         private Animator m_Animator;
+        private bool m_Consumed;
 
         private void Start() => m_Animator = GetComponent<Animator>();
 
@@ -20,9 +21,10 @@ namespace Mechanics
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.name == "Player")
+            // we will check if we are enabled, just in case player already consumed us
+            if (!m_Consumed && collision.name == "Player")
             {
-                this.enabled = false;
+                m_Consumed = true;
                 StartCoroutine(CoOnPlayerTouch());
             }
         }

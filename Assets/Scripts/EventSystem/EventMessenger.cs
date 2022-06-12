@@ -20,7 +20,7 @@ namespace EventSystem
             var obj = FindObjectOfType<EventMessenger<EventBaseClass, EventType>>();
             if (!obj)
             {
-                GameObject tmp = new GameObject(nameof(EventBaseClass));
+                GameObject tmp = new GameObject(typeof(EventBaseClass).Name);
                 obj = tmp.AddComponent<EventBaseClass>() as EventMessenger<EventBaseClass, EventType>;
                 DontDestroyOnLoad(tmp);
             }
