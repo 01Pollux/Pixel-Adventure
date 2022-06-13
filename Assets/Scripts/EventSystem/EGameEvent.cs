@@ -5,6 +5,7 @@
         FruitConsume,
 
         PlayerDeath,
+        PlayerSpawn,
         PlayerRespawn,
     }
 }

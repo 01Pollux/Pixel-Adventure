@@ -76,6 +76,7 @@ namespace Mechanics
         {
             if (!enabled)
                 return;
+
             m_MoveState |= MoveState.Jumping;
             PlayerTryJump();
         }
@@ -84,6 +85,7 @@ namespace Mechanics
         {
             if (!enabled)
                 return;
+
             m_MoveState &= ~MoveState.Jumping;
             if (!m_MoveState.HasFlag(MoveState.Dashing))
             {
@@ -97,6 +99,7 @@ namespace Mechanics
         {
             if (!enabled)
                 return;
+
             if (m_MoveState.HasFlag(MoveState.Dashing) ||
                 m_CurDashes >= m_NumberOfDahes ||
                 GameplayInput.Movement.ReadValue<Vector2>() == Vector2.zero)

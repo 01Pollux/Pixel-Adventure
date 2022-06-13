@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Mechanics;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,15 +7,18 @@ namespace Core
 {
     public class GameManager : MonoBehaviour
     {
+        [SerializeField] private GameObject m_PlayerController;
+
         public static GameManager Instance;
 
         public LocalInputActions InputSystem
         {
-            get { return m_InputActions; }
-        }
+            get;
+            private set;
+}
 
-
-        private LocalInputActions m_InputActions;
+        public GameObject PlayerObject => m_PlayerController;
+        public PlayerController PlayerController => PlayerObject.GetComponentInChildren<PlayerController>();
 
         private void Awake()
         {
@@ -26,8 +30,9 @@ namespace Core
 
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(m_PlayerController);
 
-            m_InputActions = new();
+            InputSystem = new();
         }
     }
 }
