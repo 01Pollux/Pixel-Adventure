@@ -8,7 +8,7 @@ namespace UI
     public class FruitText : MonoBehaviour
     {
         private TMPro.TextMeshProUGUI m_FruitText;
-        private int m_FruitCount;
+        private long m_FruitCount;
         private bool m_FruitChanged;
 
         private object m_TextLock;
@@ -35,11 +35,15 @@ namespace UI
             if (m_FruitChanged)
             {
                 m_FruitChanged = false;
-                m_FruitText.text = $"Fruits: {Interlocked.Increment(ref m_FruitCount)}";
+                m_FruitText.text = $"Fruits: {Interlocked.Read(ref m_FruitCount)}";
             }
         }
 
-        private void OnFruitConsume(object sender, EventArgs args) => m_FruitChanged = true;
+        private void OnFruitConsume(object sender, EventArgs args)
+        {
+            Interlocked.Increment(ref m_FruitCount);
+            m_FruitChanged = true;
+        }
 
         private void OnPlayerSpawn(object sernder, EventArgs args)
         {
