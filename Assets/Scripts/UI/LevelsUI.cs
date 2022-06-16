@@ -1,13 +1,14 @@
+using Core;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using Core;
+using UnityEditor.PackageManager;
 
 namespace UI
 {
     public class LevelsUI : MonoBehaviour
     {
-        void Awake()
+        private void Awake()
         {
             // Remove
             PlayerPrefs.SetInt("CompletedLevels", 50);
@@ -23,11 +24,26 @@ namespace UI
                 buttons[i].onClick.AddListener(
                     () =>
                     {
-                        SceneManager.LoadScene($"Lvl{idx}");
+                        LoadLevel(idx, false);
                         GameManager.SetInputState(GameManager.InputState.Gameplay);
                     }
                 );
             }
         }
+
+        public static void LoadLevel(int index, bool check_bounds)
+        {
+            if (check_bounds && (index < 1 || index > PlayerPrefs.GetInt("CompletedLevels")))
+                return;
+
+            SceneManager.LoadScene($"Lvl{index}");
+            PlayerPrefs.SetInt("CurrentLevel", index);
+        }
+
+        public static int CompletedLevels() =>
+            PlayerPrefs.GetInt("CompletedLevels");
+
+        public static int CurrentLevel() =>
+            PlayerPrefs.GetInt("CurrentLevel");
     }
 }
