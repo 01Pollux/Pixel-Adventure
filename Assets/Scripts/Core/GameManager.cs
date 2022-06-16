@@ -1,7 +1,4 @@
-﻿using Mechanics;
-using System.Collections;
-using UnityEngine;
-using UnityEngine.InputSystem;
+﻿using UnityEngine;
 
 namespace Core
 {
@@ -15,10 +12,15 @@ namespace Core
         {
             get;
             private set;
-}
+        }
 
-        public GameObject PlayerObject => m_PlayerController;
-        public PlayerController PlayerController => PlayerObject.GetComponentInChildren<PlayerController>();
+
+        public enum InputState
+        {
+            Gameplay,
+            UI
+        };
+
 
         private void Awake()
         {
@@ -30,9 +32,36 @@ namespace Core
 
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            DontDestroyOnLoad(m_PlayerController);
 
             InputSystem = new();
+
+            SetInputState(InputState.Gameplay);
+        }
+
+
+        public void SetInputState(InputState state)
+        {
+            var gp = InputSystem.Gameplay;
+            var ui = InputSystem.UI;
+
+            switch (state)
+            {
+            case InputState.Gameplay:
+                gp.Movement.Enable();
+                gp.Jump.Enable();
+                gp.Dash.Enable();
+
+                ui.Disable();
+
+                break;
+            case InputState.UI:
+                gp.Movement.Disable();
+                gp.Jump.Disable();
+                gp.Dash.Disable();
+
+                ui.Enable();
+                break;
+            }
         }
     }
 }
