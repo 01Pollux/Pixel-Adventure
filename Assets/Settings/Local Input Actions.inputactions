@@ -292,6 +292,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ExitUI",
+                    "type": "Button",
+                    "id": "d80126fb-dfad-47a9-b78f-ec5f96ab64ea",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -712,32 +721,15 @@
                     "action": "TrackedDeviceOrientation",
                     "isComposite": false,
                     "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "Shared",
-            "id": "ce9bd4da-5d68-4d62-babf-62b4944f8322",
-            "actions": [
-                {
-                    "name": "Menu",
-                    "type": "Button",
-                    "id": "21a535cf-85b3-452b-b872-fc7d5d2048c1",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
+                },
                 {
                     "name": "",
-                    "id": "f62fab3a-c637-4074-84bd-0debc7cd004a",
+                    "id": "14991909-4cc4-4c23-b188-c8f43b1dabfa",
                     "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Menu",
+                    "action": "ExitUI",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 namespace Core
 {
     public class GameManager : MonoBehaviour
     {
-        [SerializeField] private GameObject m_PlayerController;
-
         public static GameManager Instance;
 
         public LocalInputActions InputSystem
@@ -22,6 +22,7 @@ namespace Core
         };
 
 
+
         private void Awake()
         {
             if (Instance)
@@ -36,10 +37,13 @@ namespace Core
             InputSystem = new();
 
             SetInputState(InputState.Gameplay);
+
+            InputSystem.UI.ExitUI.started += OnUITryExit;
         }
 
 
-        public void SetInputState(InputState state)
+        public static void SetInputState(InputState state) => Instance.SetInputStateImpl(state);
+        private void SetInputStateImpl(InputState state)
         {
             var gp = InputSystem.Gameplay;
             var ui = InputSystem.UI;
@@ -52,6 +56,7 @@ namespace Core
                 gp.Dash.Enable();
 
                 ui.Disable();
+                Time.timeScale = 1f;
 
                 break;
             case InputState.UI:
@@ -60,8 +65,17 @@ namespace Core
                 gp.Dash.Disable();
 
                 ui.Enable();
+                Time.timeScale = 0f;
+
                 break;
             }
+        }
+
+
+        private static void OnUITryExit(InputAction.CallbackContext ctx)
+        {
+            SceneManager.UnloadSceneAsync("UILevels");
+            SetInputState(InputState.Gameplay);
         }
     }
 }

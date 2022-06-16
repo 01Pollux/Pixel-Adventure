@@ -316,6 +316,15 @@ namespace Core
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ExitUI"",
+                    ""type"": ""Button"",
+                    ""id"": ""d80126fb-dfad-47a9-b78f-ec5f96ab64ea"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -736,32 +745,15 @@ namespace Core
                     ""action"": ""TrackedDeviceOrientation"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                }
-            ]
-        },
-        {
-            ""name"": ""Shared"",
-            ""id"": ""ce9bd4da-5d68-4d62-babf-62b4944f8322"",
-            ""actions"": [
-                {
-                    ""name"": ""Menu"",
-                    ""type"": ""Button"",
-                    ""id"": ""21a535cf-85b3-452b-b872-fc7d5d2048c1"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                }
-            ],
-            ""bindings"": [
+                },
                 {
                     ""name"": """",
-                    ""id"": ""f62fab3a-c637-4074-84bd-0debc7cd004a"",
+                    ""id"": ""14991909-4cc4-4c23-b188-c8f43b1dabfa"",
                     ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Menu"",
+                    ""action"": ""ExitUI"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -788,9 +780,7 @@ namespace Core
             m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
             m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
             m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
-            // Shared
-            m_Shared = asset.FindActionMap("Shared", throwIfNotFound: true);
-            m_Shared_Menu = m_Shared.FindAction("Menu", throwIfNotFound: true);
+            m_UI_ExitUI = m_UI.FindAction("ExitUI", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -917,6 +907,7 @@ namespace Core
         private readonly InputAction m_UI_RightClick;
         private readonly InputAction m_UI_TrackedDevicePosition;
         private readonly InputAction m_UI_TrackedDeviceOrientation;
+        private readonly InputAction m_UI_ExitUI;
         public struct UIActions
         {
             private @LocalInputActions m_Wrapper;
@@ -931,6 +922,7 @@ namespace Core
             public InputAction @RightClick => m_Wrapper.m_UI_RightClick;
             public InputAction @TrackedDevicePosition => m_Wrapper.m_UI_TrackedDevicePosition;
             public InputAction @TrackedDeviceOrientation => m_Wrapper.m_UI_TrackedDeviceOrientation;
+            public InputAction @ExitUI => m_Wrapper.m_UI_ExitUI;
             public InputActionMap Get() { return m_Wrapper.m_UI; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -970,6 +962,9 @@ namespace Core
                     @TrackedDeviceOrientation.started -= m_Wrapper.m_UIActionsCallbackInterface.OnTrackedDeviceOrientation;
                     @TrackedDeviceOrientation.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnTrackedDeviceOrientation;
                     @TrackedDeviceOrientation.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnTrackedDeviceOrientation;
+                    @ExitUI.started -= m_Wrapper.m_UIActionsCallbackInterface.OnExitUI;
+                    @ExitUI.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnExitUI;
+                    @ExitUI.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnExitUI;
                 }
                 m_Wrapper.m_UIActionsCallbackInterface = instance;
                 if (instance != null)
@@ -1004,43 +999,13 @@ namespace Core
                     @TrackedDeviceOrientation.started += instance.OnTrackedDeviceOrientation;
                     @TrackedDeviceOrientation.performed += instance.OnTrackedDeviceOrientation;
                     @TrackedDeviceOrientation.canceled += instance.OnTrackedDeviceOrientation;
+                    @ExitUI.started += instance.OnExitUI;
+                    @ExitUI.performed += instance.OnExitUI;
+                    @ExitUI.canceled += instance.OnExitUI;
                 }
             }
         }
         public UIActions @UI => new UIActions(this);
-
-        // Shared
-        private readonly InputActionMap m_Shared;
-        private ISharedActions m_SharedActionsCallbackInterface;
-        private readonly InputAction m_Shared_Menu;
-        public struct SharedActions
-        {
-            private @LocalInputActions m_Wrapper;
-            public SharedActions(@LocalInputActions wrapper) { m_Wrapper = wrapper; }
-            public InputAction @Menu => m_Wrapper.m_Shared_Menu;
-            public InputActionMap Get() { return m_Wrapper.m_Shared; }
-            public void Enable() { Get().Enable(); }
-            public void Disable() { Get().Disable(); }
-            public bool enabled => Get().enabled;
-            public static implicit operator InputActionMap(SharedActions set) { return set.Get(); }
-            public void SetCallbacks(ISharedActions instance)
-            {
-                if (m_Wrapper.m_SharedActionsCallbackInterface != null)
-                {
-                    @Menu.started -= m_Wrapper.m_SharedActionsCallbackInterface.OnMenu;
-                    @Menu.performed -= m_Wrapper.m_SharedActionsCallbackInterface.OnMenu;
-                    @Menu.canceled -= m_Wrapper.m_SharedActionsCallbackInterface.OnMenu;
-                }
-                m_Wrapper.m_SharedActionsCallbackInterface = instance;
-                if (instance != null)
-                {
-                    @Menu.started += instance.OnMenu;
-                    @Menu.performed += instance.OnMenu;
-                    @Menu.canceled += instance.OnMenu;
-                }
-            }
-        }
-        public SharedActions @Shared => new SharedActions(this);
         public interface IGameplayActions
         {
             void OnMovement(InputAction.CallbackContext context);
@@ -1060,10 +1025,7 @@ namespace Core
             void OnRightClick(InputAction.CallbackContext context);
             void OnTrackedDevicePosition(InputAction.CallbackContext context);
             void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
-        }
-        public interface ISharedActions
-        {
-            void OnMenu(InputAction.CallbackContext context);
+            void OnExitUI(InputAction.CallbackContext context);
         }
     }
 }
