@@ -1,7 +1,6 @@
 using Helpers;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TouchType = Helpers.TouchType;
@@ -42,7 +41,7 @@ namespace Mechanics
         private CircleDirCollision m_DirCollision;
 
 
-        private static Core.LocalInputActions.GameplayActions GameplayInput => Core.GameManager.Instance.InputSystem.Gameplay;
+        private static Core.LocalInputActions.GameplayActions GameplayInput => Core.GameManager.GetInputManager().Gameplay;
 
         private bool IsTouchingWall => m_DirCollision.touchType.HasFlag(TouchType.Left) | m_DirCollision.touchType.HasFlag(TouchType.Right);
         private bool IsTouchingFloor => m_DirCollision.touchType.HasFlag(TouchType.Bottom);
@@ -54,20 +53,34 @@ namespace Mechanics
             m_Animator          = GetComponentInChildren<Animator>();
             m_SpriteRenderer    = GetComponentInChildren<SpriteRenderer>();
             m_DirCollision      = new(GetComponent<BoxCollider2D>(), m_Radius, m_GroundLayer);
-
-            GameplayInput.Jump.started += OnPlayerBeginJump;
-            GameplayInput.Jump.canceled += OnPlayerEndJump;
-
-            GameplayInput.Dash.started += OnPlayerTryToDash;
-
-            GameplayInput.WallClimb.started += OnPlayerBeginWallGrab;
-            GameplayInput.WallClimb.canceled += OnPlayerEndWallGrab;
         }
+
 
         private void OnEnable()
         {
             m_CurDashes = m_CurJumps = 0;
             m_MoveState = 0;
+
+            var gp = GameplayInput;
+            gp.Jump.started += OnPlayerBeginJump;
+            gp.Jump.canceled += OnPlayerEndJump;
+
+            gp.Dash.started += OnPlayerTryToDash;
+
+            gp.WallClimb.started += OnPlayerBeginWallGrab;
+            gp.WallClimb.canceled += OnPlayerEndWallGrab; ;
+        }
+
+        private void OnDisable()
+        {
+            var gp = GameplayInput;
+            gp.Jump.started -= OnPlayerBeginJump;
+            gp.Jump.canceled -= OnPlayerEndJump;
+
+            gp.Dash.started -= OnPlayerTryToDash;
+
+            gp.WallClimb.started -= OnPlayerBeginWallGrab;
+            gp.WallClimb.canceled -= OnPlayerEndWallGrab;
         }
 
 

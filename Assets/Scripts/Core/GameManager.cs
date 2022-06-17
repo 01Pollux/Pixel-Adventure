@@ -6,14 +6,8 @@ namespace Core
 {
     public class GameManager : MonoBehaviour
     {
-        public static GameManager Instance;
-
-        public LocalInputActions InputSystem
-        {
-            get;
-            private set;
-        }
-
+        private static GameManager s_Instance;
+        private LocalInputActions m_InputSystem;
 
         public enum InputState
         {
@@ -22,31 +16,30 @@ namespace Core
         };
 
 
-
         private void Awake()
         {
-            if (Instance)
+            if (s_Instance)
             {
                 Destroy(gameObject);
                 return;
             }
 
-            Instance = this;
+            s_Instance = this;
             DontDestroyOnLoad(gameObject);
 
-            InputSystem = new();
+            m_InputSystem = new();
 
             SetInputState(InputState.Gameplay);
 
-            InputSystem.UI.ExitUI.started += OnUITryExit;
+            m_InputSystem.UI.ExitUI.started += OnUITryExit;
         }
 
 
-        public static void SetInputState(InputState state) => Instance.SetInputStateImpl(state);
+        public static void SetInputState(InputState state) => s_Instance.SetInputStateImpl(state);
         private void SetInputStateImpl(InputState state)
         {
-            var gp = InputSystem.Gameplay;
-            var ui = InputSystem.UI;
+            var gp = m_InputSystem.Gameplay;
+            var ui = m_InputSystem.UI;
 
             switch (state)
             {
@@ -70,6 +63,10 @@ namespace Core
                 break;
             }
         }
+
+
+        public static LocalInputActions GetInputManager() =>
+            s_Instance.m_InputSystem;
 
 
         private static void OnUITryExit(InputAction.CallbackContext ctx)
