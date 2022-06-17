@@ -2,18 +2,21 @@ using Core;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using UnityEditor.PackageManager;
 
 namespace UI
 {
     public class LevelsUI : MonoBehaviour
     {
+        [SerializeField] private GameObject m_Levels;
+        [SerializeField] private Button m_HomeButton;
+
         private void Awake()
         {
             // Remove
-            PlayerPrefs.SetInt("CompletedLevels", 50);
+            PlayerPrefs.SetInt("CompletedLevels", 2);
+            PlayerPrefs.SetInt("CurrentLevel", 1);
 
-            Button[] buttons = GetComponentsInChildren<Button>();
+            Button[] buttons = m_Levels.GetComponentsInChildren<Button>();
 
             for (int i = 0; i < PlayerPrefs.GetInt("CompletedLevels"); i++)
                 buttons[i].interactable = true;
@@ -29,6 +32,12 @@ namespace UI
                     }
                 );
             }
+
+            m_HomeButton.onClick.AddListener(
+                () =>
+                {
+                    SceneManager.LoadScene("MainMenu");
+                });
         }
 
         public static void LoadLevel(int index, bool check_bounds)
@@ -39,6 +48,17 @@ namespace UI
             SceneManager.LoadScene($"Lvl{index}");
             PlayerPrefs.SetInt("CurrentLevel", index);
         }
+
+
+        public static void RestartLevel() =>
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
+        public static void LoadUI() =>
+            SceneManager.LoadSceneAsync("UILevels", LoadSceneMode.Additive);
+        
+        public static void UnloadUI() =>
+            SceneManager.UnloadSceneAsync("UILevels");
+
 
         public static int CompletedLevels() =>
             PlayerPrefs.GetInt("CompletedLevels");

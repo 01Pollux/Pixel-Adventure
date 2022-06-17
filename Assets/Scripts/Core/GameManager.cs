@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using UI;
+using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 namespace Core
 {
@@ -74,7 +74,7 @@ namespace Core
 
         private static void OnUITryExit(InputAction.CallbackContext ctx)
         {
-            SceneManager.UnloadSceneAsync("UILevels");
+            LevelsUI.UnloadUI();
             SetInputState(InputState.Gameplay);
         }
     }

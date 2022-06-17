@@ -1,10 +1,9 @@
 ﻿using Core;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace UI
 {
-    public class IngameUI : MonoBehaviour
+    public class GameUI : MonoBehaviour
     {
         public void PreviousLevel()
         {
@@ -20,11 +19,18 @@ namespace UI
 
         public void OpenLevels()
         {
-            SceneManager.LoadSceneAsync("UILevels", LoadSceneMode.Additive);
+            LevelsUI.LoadUI();
             GameManager.SetInputState(GameManager.InputState.UI);
         }
 
         public void RestartLevel() =>
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            LevelsUI.RestartLevel();
+
+
+        public void ContinueLevel()
+        {
+            LevelsUI.LoadLevel(LevelsUI.CompletedLevels(), true);
+            GameManager.SetInputState(GameManager.InputState.Gameplay);
+        }
     }
 }
