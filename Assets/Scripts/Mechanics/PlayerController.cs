@@ -20,7 +20,6 @@ namespace Mechanics
 
         [SerializeField] private float m_ClimbSpeed = 150f, m_SlideSpeed = 275f;
 
-
         [SerializeField] private int m_NumberOfJumps = 2;
         [SerializeField] private int m_NumberOfDahes = 2;
         [SerializeField] private float m_Radius = 0.04f;
@@ -51,10 +50,10 @@ namespace Mechanics
 
         private void Awake()
         {
-            m_Rigidbody = GetComponent<Rigidbody2D>();
-            m_Animator = GetComponent<Animator>();
-            m_SpriteRenderer = GetComponent<SpriteRenderer>();
-            m_DirCollision = new(GetComponent<BoxCollider2D>(), m_Radius, m_GroundLayer);
+            m_Rigidbody         = GetComponent<Rigidbody2D>();
+            m_Animator          = GetComponentInChildren<Animator>();
+            m_SpriteRenderer    = GetComponentInChildren<SpriteRenderer>();
+            m_DirCollision      = new(GetComponent<BoxCollider2D>(), m_Radius, m_GroundLayer);
 
             GameplayInput.Jump.started += OnPlayerBeginJump;
             GameplayInput.Jump.canceled += OnPlayerEndJump;

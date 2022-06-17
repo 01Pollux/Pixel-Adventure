@@ -1,7 +1,6 @@
 using Interfaces;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
 
 namespace Mechanics
 {
@@ -31,7 +30,7 @@ namespace Mechanics
 
         private void Awake()
         {
-            m_Animator = GetComponent<Animator>();
+            m_Animator = GetComponentInChildren<Animator>();
             m_Controller = GetComponent<PlayerController>();
             m_Rigidbody = GetComponent<Rigidbody2D>();
         }
