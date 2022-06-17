@@ -1,4 +1,7 @@
+using System.Collections;
+
 using Core;
+
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -10,11 +13,14 @@ namespace UI
         [SerializeField] private GameObject m_Levels;
         [SerializeField] private Button m_HomeButton;
 
+        private Animator m_TransitionAnim;
+        private static LevelsUI s_Instance;
+
         private void Awake()
         {
-            // Remove
-            PlayerPrefs.SetInt("CompletedLevels", 2);
-            PlayerPrefs.SetInt("CurrentLevel", 1);
+            // // Remove
+            // PlayerPrefs.SetInt("CompletedLevels", 2);
+            // PlayerPrefs.SetInt("CurrentLevel", 1);
 
             Button[] buttons = m_Levels.GetComponentsInChildren<Button>();
 
@@ -38,6 +44,9 @@ namespace UI
                 {
                     SceneManager.LoadScene("MainMenu");
                 });
+
+            m_TransitionAnim = GetComponent<Animator>();
+            s_Instance = this;
         }
 
         public static void LoadLevel(int index, bool check_bounds)
@@ -57,13 +66,20 @@ namespace UI
             SceneManager.LoadSceneAsync("UILevels", LoadSceneMode.Additive);
         
         public static void UnloadUI() =>
-            SceneManager.UnloadSceneAsync("UILevels");
-
+            s_Instance.StartCoroutine(s_Instance.CoUnloadUI());
 
         public static int CompletedLevels() =>
             PlayerPrefs.GetInt("CompletedLevels");
 
         public static int CurrentLevel() =>
             PlayerPrefs.GetInt("CurrentLevel");
+
+
+        private IEnumerator CoUnloadUI()
+        {
+            m_TransitionAnim.SetTrigger("Exit");
+            yield return new WaitForSeconds(0.15f);
+            SceneManager.UnloadSceneAsync("UILevels");
+        }
     }
 }
